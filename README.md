@@ -7,12 +7,16 @@ This is a simple logger that has colorized messages for screen prints and the ab
 
 ### Example Code
 ```go
+package main
+
 import (
+    "fmt"
     "github.com/macdub/go-colorlog"
 )
 
 func main() {
     // Init a new screen logger
+    fmt.Println(" >>> SCREEN LOGGER <<<")
     screenLogger := colorlog.New(colorlog.Ldebug)
     screenLogger.Debug("This is a DEBUG level message\n")
     screenLogger.Info("This is an INFO level message\n")
@@ -22,6 +26,7 @@ func main() {
 
 
     // Init a new file logger
+    fmt.Println(" >>> FILE LOGGER <<<")
     fileLogger := colorlog.NewFileLog(colorlog.Ldebug, "test.log")
     fileLogger.Debug("This is a DEBUG level message\n")
     fileLogger.Info("This is an INFO level message\n")
@@ -31,6 +36,7 @@ func main() {
     fileLogger.Close()
 }
 ```
+![alt text](colorlog_demo.png "ColorLog Output")
 
 ## Available Data
 ### Logging Levels
