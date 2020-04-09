@@ -79,7 +79,7 @@ Create a new file logger:
 
 ### ColorLog Methods
 Methods available to the ColorLog:
-```go
+```
 // print debug message
 func (l *ColorLog) Debug(msg string)
 
