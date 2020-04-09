@@ -35,12 +35,12 @@ func main() {
 ## Available Data
 ### Logging Levels
 ```
-0   colorlog.Lnone      - Silence all logging
-10  colorlog.Ldebug     - Log Debug messages
-11  colorlog.Linfo      - Log Info messages
-12  colorlog.Lwarn      - Log Warning messages
-13  colorlog.Lerror     - Log Error messages
-14  colorlog.Lfatal     - Log Fatal messages
+colorlog.Lnone      - Silence all logging
+colorlog.Ldebug     - Log Debug messages
+colorlog.Linfo      - Log Info messages
+colorlog.Lwarn      - Log Warning messages
+colorlog.Lerror     - Log Error messages
+colorlog.Lfatal     - Log Fatal messages
 ```
 ### Colors
 These are the alias for the ANSI color codes
