@@ -129,7 +129,6 @@ func (l *ColorLog) Fatal(msg string) {
 	if l.isFileLogger {
 		l.Write(msg, 14)
 	}
-	panic(msg)
 }
 
 func (l *ColorLog) Print(msg string, level LogLevelEnum, color ColorEnum) {
