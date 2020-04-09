@@ -38,6 +38,8 @@ func main() {
 ```
 ![alt text](colorlog_demo.png "ColorLog Output")
 
+The test.log file will contain the same messages printed to the screen without the color tags.
+
 ## Available Data
 ### Logging Levels
 ```
