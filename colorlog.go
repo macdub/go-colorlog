@@ -72,7 +72,7 @@ func New(level LogLevelEnum) *ColorLog {
 	return &ColorLog{LogLevel: LogLevelEnum(level), screenFormat: screenFormat, fileFormat: fileFormat, isFileLogger: false}
 }
 
-func NewFileLogger(level int, filename string) *ColorLog {
+func NewFileLog(level LogLevelEnum, filename string) *ColorLog {
 	if level > 14 {
 		level = 11
 	}

@@ -75,7 +75,7 @@ Create a new screen logger:
 `func New(level LogLevelEnum) *ColorLog`
 
 Create a new file logger:
-`funct NewFileLog(level LogLevelEnum, filename string) *ColorLog`
+`func NewFileLog(level LogLevelEnum, filename string) *ColorLog`
 
 ### ColorLog Methods
 Methods available to the ColorLog:
