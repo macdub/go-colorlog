@@ -16,3 +16,6 @@
 
 # ignore sw* files
 *.swp
+
+# ignore my note files
+*.note
