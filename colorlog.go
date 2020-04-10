@@ -165,3 +165,7 @@ func (l *ColorLog) TimeStamp() string {
 func (l *ColorLog) SetLogLevel(level LogLevelEnum) {
 	l.LogLevel = level
 }
+
+func(l *ColorLog) GetLogLevel() LogLevelEnum {
+    return l.LogLevel
+}
