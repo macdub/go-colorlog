@@ -121,3 +121,6 @@ func (l *ColorLog) TimeStamp() string
 // set a new logging level
 func (l *ColorLog) SetLogLevel(level LogLevelEnum)
 ```
+
+## To Do
+- Make the logging calls be able to take in a format string and parameters
