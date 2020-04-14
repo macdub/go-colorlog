@@ -34,6 +34,15 @@ func main() {
     fileLogger.Error("This is an ERROR level message\n")
     fileLogger.Fatal("This is a FATAL level message\n")
     fileLogger.Close()
+
+    // Init a new colorless logger
+    fmt.Println(" >>> COLORLESS LOGGER <<<")
+    colorlessLogger := colorlog.NewColorless(colorlog.Ldebug)
+    screenLogger.Debug("This is a DEBUG level message\n")
+    screenLogger.Info("This is an INFO level message\n")
+    screenLogger.Warn("This is a WARN level message\n")
+    screenLogger.Error("This is an ERROR level message\n")
+    screenLogger.Fatal("This is a FATAL level message\n")
 }
 ```
 ![alt text](colorlog_demo.png "ColorLog Output")
@@ -73,6 +82,7 @@ type ColorLog struct {
     logFile      *os.File
     logWriter    *bufio.Writer
     isFileLogger bool
+    noColor      bool
 }
 
 type LogLevelEnum int
@@ -82,29 +92,33 @@ type ColorEnum int
 Create a new screen logger:
 `func New(level LogLevelEnum) *ColorLog`
 
+Create a new colorless screen logger:
+`func NewColorless(level LogLevelEnum) *ColorLog`
+
 Create a new file logger:
 `func NewFileLog(level LogLevelEnum, filename string) *ColorLog`
 
 ### ColorLog Methods
 Methods available to the ColorLog:
+- basic logging functions (Debug, Info, Warn, Error, Fatal) take in a format string and options like fmt.Printf
 ```
 // print debug message
-func (l *ColorLog) Debug(msg string)
+func (l *ColorLog) Debug(msg string, opts ...)
 
 // print info message
-func (l *ColorLog) Info(msg string)
+func (l *ColorLog) Info(msg string, opts ...)
 
 // print warning message
-func (l *ColorLog) Warn(msg string)
+func (l *ColorLog) Warn(msg string, opts ...)
 
 // print error message
-func (l *ColorLog) Error(msg string)
+func (l *ColorLog) Error(msg string, opts ...)
 
 // print fatal error message
-func (l *ColorLog) Fatal(msg string)
+func (l *ColorLog) Fatal(msg string, opts ...)
 
 // print using the logging format to screen
-func (l *ColorLog) Print(msg string, level LogLevelEnum, color ColorEnum)
+func (l *ColorLog) Print(level LogLevelEnum, color ColorEnum, msg string, opts ...)
 
 // print a colorized message to screen
 func (l *ColorLog) Printc(msg string, level LogLevelEnum, color ColorEnum)
@@ -123,4 +137,6 @@ func (l *ColorLog) SetLogLevel(level LogLevelEnum)
 ```
 
 ## To Do
-- Make the logging calls be able to take in a format string and parameters
+- ~~Make the logging calls be able to take in a format string and parameters~~ Done
+- ~~Implement a colorless option~~ Done
+- Add in a quiet log level. To allow for the option to squelch some info level logging.

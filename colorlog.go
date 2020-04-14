@@ -62,14 +62,21 @@ type ColorLog struct {
 	logFile      *os.File
 	logWriter    *bufio.Writer
 	isFileLogger bool
+	noColor      bool
 }
 
 func New(level LogLevelEnum) *ColorLog {
-	// default to INFO if level requested is beyond the valid enums
 	if level > 14 {
 		level = 11
 	}
-	return &ColorLog{LogLevel: LogLevelEnum(level), screenFormat: screenFormat, fileFormat: fileFormat, isFileLogger: false}
+	return &ColorLog{LogLevel: LogLevelEnum(level), screenFormat: screenFormat, fileFormat: fileFormat, isFileLogger: false, noColor: false}
+}
+
+func NewColorless(level LogLevelEnum) *ColorLog {
+	if level > 14 {
+		level = 11
+	}
+	return &ColorLog{LogLevel: LogLevelEnum(level), screenFormat: screenFormat, fileFormat: fileFormat, isFileLogger: false, noColor: true}
 }
 
 func NewFileLog(level LogLevelEnum, filename string) *ColorLog {
@@ -91,40 +98,70 @@ func NewFileLog(level LogLevelEnum, filename string) *ColorLog {
 		isFileLogger: true}
 }
 
-func (l *ColorLog) Debug(msg string) {
-	l.Print(msg, 10, Green)
+func (l *ColorLog) Debug(msg string, opts ...interface{}) {
+	msg = fmt.Sprintf(msg, opts...)
+
+	if !l.noColor {
+		l.Print(msg, 10, Green)
+	} else {
+		fmt.Printf(l.fileFormat, l.TimeStamp(), LogLevelEnum(10), msg)
+	}
 
 	if l.isFileLogger {
 		l.Write(msg, 10)
 	}
 }
 
-func (l *ColorLog) Info(msg string) {
-	l.Print(msg, 11, Grey)
+func (l *ColorLog) Info(msg string, opts ...interface{}) {
+	msg = fmt.Sprintf(msg, opts...)
+
+	if !l.noColor {
+		l.Print(msg, 11, Grey)
+	} else {
+		fmt.Printf(l.fileFormat, l.TimeStamp(), LogLevelEnum(11), msg)
+	}
 
 	if l.isFileLogger {
 		l.Write(msg, 11)
 	}
 }
 
-func (l *ColorLog) Warn(msg string) {
-	l.Print(msg, 12, Yellow)
+func (l *ColorLog) Warn(msg string, opts ...interface{}) {
+	msg = fmt.Sprintf(msg, opts...)
+
+	if !l.noColor {
+		l.Print(msg, 12, Yellow)
+	} else {
+		fmt.Printf(l.fileFormat, l.TimeStamp(), LogLevelEnum(12), msg)
+	}
 
 	if l.isFileLogger {
 		l.Write(msg, 12)
 	}
 }
 
-func (l *ColorLog) Error(msg string) {
-	l.Print(msg, 13, Red)
+func (l *ColorLog) Error(msg string, opts ...interface{}) {
+	msg = fmt.Sprintf(msg, opts...)
+
+	if !l.noColor {
+		l.Print(msg, 13, Red)
+	} else {
+		fmt.Printf(l.fileFormat, l.TimeStamp(), LogLevelEnum(13), msg)
+	}
 
 	if l.isFileLogger {
 		l.Write(msg, 13)
 	}
 }
 
-func (l *ColorLog) Fatal(msg string) {
-	l.Print(msg, 14, Magenta)
+func (l *ColorLog) Fatal(msg string, opts ...interface{}) {
+	msg = fmt.Sprintf(msg, opts...)
+
+	if !l.noColor {
+		l.Print(msg, 14, Magenta)
+	} else {
+		fmt.Printf(l.fileFormat, l.TimeStamp(), LogLevelEnum(14), msg)
+	}
 
 	if l.isFileLogger {
 		l.Write(msg, 14)
@@ -137,7 +174,8 @@ func (l *ColorLog) Print(msg string, level LogLevelEnum, color ColorEnum) {
 	}
 }
 
-func (l *ColorLog) Printc(msg string, level LogLevelEnum, color ColorEnum) {
+func (l *ColorLog) Printc(level LogLevelEnum, color ColorEnum, msg string, opts ...interface{}) {
+	msg = fmt.Sprintf(msg, opts...)
 	if l.LogLevel > 0 && level >= l.LogLevel {
 		fmt.Printf(colorFormat, color, msg)
 	}
@@ -166,6 +204,6 @@ func (l *ColorLog) SetLogLevel(level LogLevelEnum) {
 	l.LogLevel = level
 }
 
-func(l *ColorLog) GetLogLevel() LogLevelEnum {
-    return l.LogLevel
+func (l *ColorLog) GetLogLevel() LogLevelEnum {
+	return l.LogLevel
 }
