@@ -7,33 +7,33 @@ import (
 	"time"
 )
 
-type LogLevelEnum int
-type ColorEnum int
+type LogLevelEnum int   // Enum for Logging Levels
+type ColorEnum int      // Enum for Colors
 
 const (
 	// Log Levels
-	Lnone  LogLevelEnum = 0
-	Ldebug LogLevelEnum = 10
-	Linfo  LogLevelEnum = 11
-	Lwarn  LogLevelEnum = 12
-	Lerror LogLevelEnum = 13
-	Lfatal LogLevelEnum = 14
+	Lnone  LogLevelEnum = 0     // Disable all logging
+	Ldebug LogLevelEnum = 10    // Log Debug and above
+	Linfo  LogLevelEnum = 11    // Log Info and above
+	Lwarn  LogLevelEnum = 12    // Log Warn and above
+	Lerror LogLevelEnum = 13    // Log Error and above
+	Lfatal LogLevelEnum = 14    // Log Fatal
 
 	// Colors
-	Black   ColorEnum = 30
-	Red     ColorEnum = 31
-	Green   ColorEnum = 32
-	Yellow  ColorEnum = 93
-	Blue    ColorEnum = 34
-	Magenta ColorEnum = 35
-	Cyan    ColorEnum = 36
-	Grey    ColorEnum = 37
-	White   ColorEnum = 97
+	Black   ColorEnum = 30  // Black
+	Red     ColorEnum = 31  // Red
+	Green   ColorEnum = 32  // Green
+	Yellow  ColorEnum = 93  // Yellow
+	Blue    ColorEnum = 34  // Blue
+	Magenta ColorEnum = 35  // Magenta
+	Cyan    ColorEnum = 36  // Cyan
+	Grey    ColorEnum = 37  // Grey
+	White   ColorEnum = 97  // White
 
 	// Formats
-	screenFormat string = "\033[0;%dm[%s] <%v> %s\033[0m"
-	colorFormat  string = "\033[0;%dm%s\033[0m"
-	fileFormat   string = "[%s] <%v> %s"
+	screenFormat string = "\033[0;%dm[%s] <%v> %s\033[0m"  // Format to use for colorized log lines
+	colorFormat  string = "\033[0;%dm%s\033[0m"            // Format to use for colorizing appends to log lines
+	fileFormat   string = "[%s] <%v> %s"                   // Format to use for log file lines (same as screenFormat minus the color
 )
 
 func (ll LogLevelEnum) String() string {
@@ -55,6 +55,7 @@ func (ll LogLevelEnum) String() string {
 	}
 }
 
+// Structure for the ColorLog
 type ColorLog struct {
 	screenFormat string
 	fileFormat   string
@@ -65,6 +66,7 @@ type ColorLog struct {
 	noColor      bool
 }
 
+// Create a new ColorLog
 func New(level LogLevelEnum) *ColorLog {
 	if level > 14 {
 		level = 11
@@ -72,6 +74,7 @@ func New(level LogLevelEnum) *ColorLog {
 	return &ColorLog{LogLevel: LogLevelEnum(level), screenFormat: screenFormat, fileFormat: fileFormat, isFileLogger: false, noColor: false}
 }
 
+// Create a new colorless ColorLog
 func NewColorless(level LogLevelEnum) *ColorLog {
 	if level > 14 {
 		level = 11
@@ -79,6 +82,7 @@ func NewColorless(level LogLevelEnum) *ColorLog {
 	return &ColorLog{LogLevel: LogLevelEnum(level), screenFormat: screenFormat, fileFormat: fileFormat, isFileLogger: false, noColor: true}
 }
 
+// Create a new ColorLog file logger
 func NewFileLog(level LogLevelEnum, filename string) *ColorLog {
 	if level > 14 {
 		level = 11
@@ -98,6 +102,7 @@ func NewFileLog(level LogLevelEnum, filename string) *ColorLog {
 		isFileLogger: true}
 }
 
+// Debug log message
 func (l *ColorLog) Debug(msg string, opts ...interface{}) {
 	msg = fmt.Sprintf(msg, opts...)
 
@@ -112,6 +117,7 @@ func (l *ColorLog) Debug(msg string, opts ...interface{}) {
 	}
 }
 
+// Info log message
 func (l *ColorLog) Info(msg string, opts ...interface{}) {
 	msg = fmt.Sprintf(msg, opts...)
 
@@ -126,6 +132,7 @@ func (l *ColorLog) Info(msg string, opts ...interface{}) {
 	}
 }
 
+// Warn log message
 func (l *ColorLog) Warn(msg string, opts ...interface{}) {
 	msg = fmt.Sprintf(msg, opts...)
 
@@ -140,6 +147,7 @@ func (l *ColorLog) Warn(msg string, opts ...interface{}) {
 	}
 }
 
+// Error log message
 func (l *ColorLog) Error(msg string, opts ...interface{}) {
 	msg = fmt.Sprintf(msg, opts...)
 
@@ -154,6 +162,7 @@ func (l *ColorLog) Error(msg string, opts ...interface{}) {
 	}
 }
 
+// Fatal log message
 func (l *ColorLog) Fatal(msg string, opts ...interface{}) {
 	msg = fmt.Sprintf(msg, opts...)
 
@@ -168,12 +177,14 @@ func (l *ColorLog) Fatal(msg string, opts ...interface{}) {
 	}
 }
 
+// Print helper function
 func (l *ColorLog) Print(msg string, level LogLevelEnum, color ColorEnum) {
 	if l.LogLevel > 0 && LogLevelEnum(level) >= l.LogLevel {
 		fmt.Printf(l.screenFormat, color, l.TimeStamp(), LogLevelEnum(level), msg)
 	}
 }
 
+// Print colorized message
 func (l *ColorLog) Printc(level LogLevelEnum, color ColorEnum, msg string, opts ...interface{}) {
 	msg = fmt.Sprintf(msg, opts...)
 	if l.LogLevel > 0 && level >= l.LogLevel {
@@ -181,6 +192,7 @@ func (l *ColorLog) Printc(level LogLevelEnum, color ColorEnum, msg string, opts 
 	}
 }
 
+// Logfile write helper function
 func (l *ColorLog) Write(msg string, level LogLevelEnum) {
 	if l.isFileLogger && l.LogLevel > 0 && LogLevelEnum(level) >= l.LogLevel {
 		str := fmt.Sprintf(l.fileFormat, l.TimeStamp(), LogLevelEnum(level), msg)
@@ -189,6 +201,7 @@ func (l *ColorLog) Write(msg string, level LogLevelEnum) {
 	}
 }
 
+// Helper function to close a file logger
 func (l *ColorLog) Close() {
 	if l.isFileLogger {
 		l.logWriter.Flush()
@@ -196,14 +209,17 @@ func (l *ColorLog) Close() {
 	}
 }
 
+// Get the current Timestamp
 func (l *ColorLog) TimeStamp() string {
 	return time.Now().Format(time.RFC3339)
 }
 
+// Set the logger's log level
 func (l *ColorLog) SetLogLevel(level LogLevelEnum) {
 	l.LogLevel = level
 }
 
+// Return the logger's log level
 func (l *ColorLog) GetLogLevel() LogLevelEnum {
 	return l.LogLevel
 }
