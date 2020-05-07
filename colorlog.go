@@ -16,7 +16,7 @@ type ColorEnum int
 const (
 	// Log Levels
 
-	Lnone  LogLevelEnum = 0  // Log nothing
+	Lnone  LogLevelEnum = 0  // Log None
 	Ldebug LogLevelEnum = 10 // Log Debug and above
 	Linfo  LogLevelEnum = 11 // Log Info and above
 	Lwarn  LogLevelEnum = 12 // Log Warn and above
